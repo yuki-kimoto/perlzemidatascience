@@ -1,0 +1,143 @@
+<h2>中央値を求めてみよう</h2>
+
+中央値を求める方法をPerlプログラムを用いて説明します。
+
+<h3>配列の中央値を求めてみよう。</h3>
+
+以下のような配列を考えてみます。
+
+<pre>
+my @array1 = (1, 4, 5, 7, 8);
+my @array2 = (1, 4, 5, 7, 8, 12);
+</pre>
+
+<h4>配列の中央値を求めるサンプルプログラム</h4>
+実際に配列から中央値を求めます。<a href="https://metacpan.org/pod/Statistics::Lite">Statistics::Liteモジュール</a>にmedian関数がありますが、この例では利用しません。
+中央値は要素数が奇数の場合は要素の中央にある値となり、偶数の場合は中央にある2つの値の平均を中央値として求めることができます。
+※コードの簡略化のため、ソート済みのデータを使用します。
+
+<h5>奇数の場合</h5>
+<pre>
+use strict;
+use warnings;
+
+my @array1 = (1, 4, 5, 7, 8); 
+my $array_cnt = @array1; # データの個数を求めています。
+
+my $median_pos = int($array_cnt / 2);;
+my $median = 0;
+
+if ( $array_cnt % 2 == 1) {
+	# ★このブロックが処理されます。
+	$median = $array1[$median_pos];
+} else {
+	my $median_pos2 = $median_pos - 1;
+	$median = ($array1[$median_pos] + $array1[$median_pos2]) / 2;
+}
+
+print "$median\n";
+</pre>
+
+実行結果
+<pre>
+5
+</pre>
+
+<h5>偶数の場合</h5>
+<pre>
+use strict;
+use warnings;
+
+my @array2 = (1, 4, 5, 7, 8, 12); 
+my $array_cnt = @array2; # データの個数を求めています。
+
+my $median_pos = int($array_cnt / 2);;
+my $median = 0;
+
+if ( $array_cnt % 2 == 1) {
+	$median = $array2[$median_pos];
+} else {
+	# ★このブロックが処理されます。
+	my $median_pos2 = $median_pos - 1;
+	$median = ($array2[$median_pos] + $array2[$median_pos2]) / 2;
+}
+
+print "$median\n";
+</pre>
+
+実行結果
+<pre>
+6
+</pre>
+
+最大値、最小値などのように値の比較を行う必要がなく、要素の配列の中央の要素を取得できます。
+
+
+<h3>表形式のデータから、特定の列の中央値を求めてみよう。</h3>
+
+以下のデータを考えてみましょう。
+<table> 
+  <thead>
+    <tr><th>name</th><th>age</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>bob</th><th>9</th></tr>
+    <tr><th>alice</th><th>11</th></tr>
+    <tr><th>tom</th><th>13</th></tr>
+  </tbody>
+</table>
+
+配列,ハッシュのリファレンスで表すと以下のようになります。
+<pre>
+$array_ref = [
+  {name => 'bob',  age => 9},
+  {name => 'alice',age => 11},
+  {name => 'tom',  age => 13}
+];
+</pre>
+
+<h4>age列の中央値を求めるサンプルプログラム</h4>
+参照するデータが複雑になったためデータアクセスも少し難しくなりましたが、
+チェックする方法は先ほどと同じです。
+
+<pre>
+use strict;
+use warnings;
+
+my $array_ref = [
+  {name => 'bob', age => 9},
+  {name => 'alice',age => 11},
+  {name => 'tom', age => 13}
+];
+
+my $array_cnt = 0;
+my @array;
+
+for my $info (@{$array_ref}) {
+    push(@array, $info->{'age'});
+    $array_cnt += 1;
+}
+
+my $median_pos = int($array_cnt / 2);;
+my $median = 0;
+
+if ( $array_cnt % 2 == 1) {
+	# ★このブロックが処理されます。
+	$median = $array[$median_pos];
+} else {
+	my $median_pos2 = $median_pos - 1;
+	$median = ($array[$median_pos] + $array[$median_pos2]) / 2;
+}
+
+print "$median\n";
+</pre>
+
+実行結果
+<pre>
+11
+</pre>
+
+リファレンスを扱った以外は先ほどと同じ処理になります。
+データの個数は単純にカウントすることで求めています。データアクセスの仕方がわかりやすいように一度別の配列を用意してコピーしています。
+
+このプログラムは、コピー＆ペーストして、<a href="https://perlbanjo.com">PerlBanjo</a>で、すぐに試すことができます。
