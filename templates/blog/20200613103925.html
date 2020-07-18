@@ -71,7 +71,7 @@ array2の中央値は:6
 
 配列,ハッシュのリファレンスで表すと以下のようになります。
 <pre>
-$array_ref = [
+$array_ref1 = [
   {name => 'bob',  age => 9},
   {name => 'alice',age => 11},
   {name => 'tom',  age => 13}
@@ -81,45 +81,59 @@ $array_ref = [
 <h4>age列の中央値を求めるサンプルプログラム</h4>
 参照するデータが複雑になったためデータアクセスも少し難しくなりましたが、
 チェックする方法は先ほどと同じです。
+※偶数パターンも入れるため$array_ref2も追加しています。
 
 <pre>
 use strict;
 use warnings;
+use Data::Dumper;
 
-my $array_ref = [
+my $array_ref1 = [
   {name => 'bob', age => 9},
   {name => 'alice',age => 11},
   {name => 'tom', age => 13}
 ];
 
-my $array_cnt = 0;
-my @array;
+my $array_ref2 = [
+  {name => 'bob', age => 9},
+  {name => 'alice',age => 11},
+  {name => 'tom', age => 13},
+  {name => 'carol', age => 15}
+];
 
-for my $info (@{$array_ref}) {
-    push(@array, $info->{'age'});
-    $array_cnt += 1;
-}
-
-my $median_pos = int($array_cnt / 2);;
 my $median = 0;
 
-if ( $array_cnt % 2 == 1) {
-	# ★このブロックが処理されます。
-	$median = $array[$median_pos];
-} else {
-	my $median_pos2 = $median_pos - 1;
-	$median = ($array[$median_pos] + $array[$median_pos2]) / 2;
+sub get_median {
+    my ($array_ref) = @_;
+    my $array_cnt = @$array_ref;
+    my $median_pos = int($array_cnt / 2);
+    my $ret_median = 0;
+
+    if ( $array_cnt % 2 == 1) {
+	    $ret_median = $array_ref->[$median_pos]->{'age'};
+    } else {
+        my $median_pos2 = $median_pos - 1;
+        my $value1 = $array_ref->[$median_pos]->{'age'};
+        my $value2 = $array_ref->[$median_pos2]->{'age'};
+       
+        $ret_median = ($value1 + $value2) / 2;
+    }
+    return $ret_median;
 }
 
-print "$median\n";
+$median = get_median(\@$array_ref1);
+print "array_ref1の中央値は:" . "$median" . "\n";
+
+$median = get_median(\@$array_ref2);
+print "array_ref2の中央値は:" . "$median" . "\n";
 </pre>
 
 実行結果
 <pre>
-11
+array_ref1の中央値は:11
+array_ref2の中央値は:12
 </pre>
 
 リファレンスを扱った以外は先ほどと同じ処理になります。
-データの個数は単純にカウントすることで求めています。データアクセスの仕方がわかりやすいように一度別の配列を用意してコピーしています。
 
 このプログラムは、コピー＆ペーストして、<a href="https://perlbanjo.com">PerlBanjo</a>で、すぐに試すことができます。
