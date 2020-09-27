@@ -15,39 +15,38 @@ my @array = (10, 50, 60, 65, 70, 90);
 標準偏差の求め方の説明はしません。
 
 <pre>
-    #!/usr/bin/env perl
-    use strict;
-    use warnings;
-    
-    sub get_stddev {
-      return sqrt(get_disp(@_));
-    }
-    
-    sub get_disp {
-      my ($array_ref) = @_;
-      my $mean = get_avg($array_ref);
-      my $count = @$array_ref;
-      my $sum = 0;
-      
-      for my $num (@$array_ref) {
-          $sum += (($num - $mean) ** 2);
-      }
-      return $sum / $count;
-    }
-    
-    sub get_avg {
-      my ($array_ref) = @_;
-      my $count = @$array_ref;
-      my $sum = 0;
-      for my $num (@$array_ref) {
-          $sum += $num;
-      }
-      return $sum / $count;
-    }
+use strict;
+use warnings;
 
-    my @array = (10, 50, 60, 65, 70, 90);
-    my $stddev = get_stddev(\@array);
-    print "標準偏差は、" . $stddev . "です。\n";
+sub get_stddev {
+  return sqrt(get_disp(@_));
+}
+
+sub get_disp {
+  my ($array_ref) = @_;
+  my $mean = get_avg($array_ref);
+  my $count = @$array_ref;
+  my $sum = 0;
+  
+  for my $num (@$array_ref) {
+      $sum += (($num - $mean) ** 2);
+  }
+  return $sum / $count;
+}
+
+sub get_avg {
+  my ($array_ref) = @_;
+  my $count = @$array_ref;
+  my $sum = 0;
+  for my $num (@$array_ref) {
+      $sum += $num;
+  }
+  return $sum / $count;
+}
+
+my @array = (10, 50, 60, 65, 70, 90);
+my $stddev = get_stddev(\@array);
+print "標準偏差は、" . $stddev . "です。\n";
 </pre>
 
 実行結果
