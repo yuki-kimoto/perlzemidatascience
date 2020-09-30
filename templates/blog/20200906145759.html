@@ -1,0 +1,57 @@
+<h2>標準偏差を求めてみよう</h2>
+
+標準偏差を求める方法をPerlプログラムを用いて説明します。
+
+<h3>配列の中央値を求めてみよう。</h3>
+
+以下のような配列を考えてみます。
+
+<pre>
+my @array = (10, 50, 60, 65, 70, 90);
+</pre>
+
+<h4>配列の標準偏差を求めるサンプルプログラム</h4>
+実際に配列から標準偏差を求めます。<a href="https://metacpan.org/pod/Statistics::Lite">Statistics::Liteモジュール</a>にstddev関数がありますが、この例では利用しません。
+標準偏差の求め方の説明はしません。
+
+<pre>
+use strict;
+use warnings;
+
+sub get_stddev {
+  return sqrt(get_disp(@_));
+}
+
+sub get_disp {
+  my ($array_ref) = @_;
+  my $mean = get_avg($array_ref);
+  my $count = @$array_ref;
+  my $sum = 0;
+  
+  for my $num (@$array_ref) {
+      $sum += (($num - $mean) ** 2);
+  }
+  return $sum / $count;
+}
+
+sub get_avg {
+  my ($array_ref) = @_;
+  my $count = @$array_ref;
+  my $sum = 0;
+  for my $num (@$array_ref) {
+      $sum += $num;
+  }
+  return $sum / $count;
+}
+
+my @array = (10, 50, 60, 65, 70, 90);
+my $stddev = get_stddev(\@array);
+print "標準偏差は、" . $stddev . "です。\n";
+</pre>
+
+実行結果
+<pre>
+標準偏差は、24.452334585202です。
+</pre>
+
+このプログラムは、コピー＆ペーストして、<a href="https://perlbanjo.com">PerlBanjo</a>で、すぐに試すことができます。
