@@ -1,0 +1,23 @@
+<h2>Perlを使ってデータベースから最大最小平均値を取得しよう</h2>
+
+<pre>
+use strict;
+use warnings;
+use DBI;
+
+my $dbh = DBI->connect(
+  "DBI:mysql:kimotosystem:localhost",
+  "kimoto",
+  "kimoto"
+) or die "cannot connect to MySWL: $DBI::errstr";
+
+my $sth = $dbh->prepare("SELECT min(price), max(price),avg(price) FROM kimotosystem.book;");
+$sth->execute();
+
+my $ary_ref = $sth->fetchrow_arrayref;
+my ($min, $max, $avg) = @$ary_ref;
+print "min=$min, max=$max, avg=$avg\n";
+
+$sth->finish;
+$dbh->disconnect;
+</pre>
