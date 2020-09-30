@@ -1,5 +1,12 @@
-<h2>SQLで最大最小平均値を求めてみよう</h2>
+<h2>SQLで最大最・最小値・平均値を求めてみよう</h2>
 
+SQLで最大値・最小値・平均値を求めてみましょう。テーブルを作成し、データを挿入し、SQLで最大値・最小値・平均値を求めています。
+
+<h3>データベースを作成</h3>
+
+データベースがない場合は<a href="https://mariadb.perlzemi.com/blog/20200521082643.html">create database文でデータベースを作成</a>しましょう。
+
+<pre>
 MariaDB [none]> create database kimotosystem;
 
 MariaDB [kimotosystem]> use kimotosystem;
@@ -11,7 +18,13 @@ MariaDB [kimotosystem]> show tables;
 | book            |
 +-----------------+
 1 row in set (0.01 sec)
+</pre>
 
+<h3>テーブルの作成</h3>
+
+<a href="https://mariadb.perlzemi.com/blog/20200218150054.html">create table文を使ってテーブルを作成</a>します。テーブル名はbookです。IDと書名と価格のデータです。
+
+<pre>
 MariaDB [kimotosystem]> 
 MariaDB [kimotosystem]> 
 MariaDB [kimotosystem]> create table kimotosystem.book(id int AUTO_INCREMENT PRIMARY KEY,name varchar(10), price int);
@@ -26,7 +39,13 @@ MariaDB [itodb]> desc book;
 | price | int(11)     | YES  |     | NULL    |                |
 +-------+-------------+------+-----+---------+----------------+
 3 rows in set (0.00 sec)
+</pre>
 
+<h3>データの挿入</h3>
+
+書籍のデータをSQLのinsert文を使って挿入します。
+
+<pre>
 MariaDB [kimotosystem]> insert into kimotosystem.book (name,price) values ('book A',800),('book B', 1000),('book C', 1500),('book D', 2500),('book E',2800),('book F',3500),('book G',4000);
 Query OK, 7 rows affected (0.01 sec)
 Records: 7  Duplicates: 0  Warnings: 0
@@ -44,7 +63,13 @@ MariaDB [kimotosystem]> select * from kimotosystem.book;
 |  7 | book G |  4000 |
 +----+--------+-------+
 7 rows in set (0.01 sec)
+</pre>
 
+<h3>SQLで最大値・最小値・平均値を求める</h3>
+
+select文と集合演算を使って、最大値・最小値・平均値を求めます。
+
+<pre>
 MariaDB [kimotosystem]> select max(price), min(price),avg(price) from kimotosystem.book;
 +------------+------------+------------+
 | max(price) | min(price) | avg(price) |
@@ -52,4 +77,4 @@ MariaDB [kimotosystem]> select max(price), min(price),avg(price) from kimotosyst
 |       4000 |        800 |  2300.0000 |
 +------------+------------+------------+
 1 row in set (0.00 sec)
-
+</pre>
