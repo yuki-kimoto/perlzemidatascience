@@ -6,26 +6,29 @@ SQLで月毎の売り上げを集計してみましょう。テーブル作成�
 
 <h3>テーブルの作成</h3>
 
-テーブル名はsalesです。IDと販売日時と売り上げ価格のデータです。
+テーブル名はsaleです。IDと販売日時と売り上げ価格のデータです。
 <pre>
-MariaDB [kimotosystem]>create table kimotosystem.sales
+MariaDB [kimotosystem]>create table kimotosystem.sale
     -> (
-    -> sales_id int AUTO_INCREMENT PRIMARY KEY,
-    -> sales_datetime DATETIME, 
-    -> sales_amount int
+    -> id int AUTO_INCREMENT PRIMARY KEY,
+    -> dtime datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+    -> book_id int NOT NULL,
+    -> price int NOT NULL,
+    -> CONSTRAINT fk_book_id FOREIGN KEY (book_id) REFERENCES book (id)
     -> );
-Query OK, 0 rows affected (0.01 sec)
+Query OK, 0 rows affected (0.02 sec)
 
 MariaDB [kimotosystem]>
-MariaDB [kimotosystem]>desc kimotosystem.sales;
-+----------------+----------+------+-----+---------+----------------+
-| Field          | Type     | Null | Key | Default | Extra          |
-+----------------+----------+------+-----+---------+----------------+
-| sales_id       | int      | NO   | PRI | NULL    | auto_increment |
-| sales_datetime | datetime | YES  |     | NULL    |                |
-| sales_amount   | int      | YES  |     | NULL    |                |
-+----------------+----------+------+-----+---------+----------------+
-3 rows in set (0.01 sec)
+MariaDB [kimotosystem]>desc kimotosystem.sale;
++---------+----------+------+-----+---------------------+----------------+
+| Field   | Type     | Null | Key | Default             | Extra          |
++---------+----------+------+-----+---------------------+----------------+
+| id      | int      | NO   | PRI | NULL                | auto_increment |
+| dtime   | datetime | NO   |     | 0001-01-01 00:00:00 |                |
+| book_id | int      | NO   | MUL | NULL                |                |
+| price   | int      | NO   |     | NULL                |                |
++---------+----------+------+-----+---------------------+----------------+
+4 rows in set (0.00 sec)
 
 </pre>
 
