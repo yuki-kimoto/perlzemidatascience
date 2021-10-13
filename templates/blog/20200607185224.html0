@@ -1,0 +1,106 @@
+<h2>平均値を求めてみよう</h2>
+
+平均値を求める方法をPerlプログラムを用いて説明します。
+
+<h3>配列の平均値を求めてみよう。</h3>
+
+以下のような配列を考えてみます。
+
+<pre>
+my @array = (8, 1, 4, 5, 7);
+</pre>
+
+<h4>配列の平均値を求めるサンプルプログラム</h4>
+実際に配列から平均値を求めます。<a href="https://metacpan.org/pod/Statistics::Lite">Statistics::Liteモジュール</a>にmean関数がありますが、この例では利用しません。
+今まで紹介していた<a href="https://metacpan.org/pod/List::Util">List::Utilモジュール</a>には平均値を求める関数はありません。
+平均値はすべてのデータの値を足し、データの個数で割ることで求めることができます。
+
+<pre>
+use strict;
+use warnings;
+
+my @array = (8, 1, 4, 5, 7); 
+my $array_cnt = @array; # データの個数を求めています。
+
+my $sum = 0;
+my $avg = 0;
+
+for my $num (@array) {
+    $sum += $num;
+}
+$avg = $sum / $array_cnt;
+
+print "$avg\n";
+</pre>
+
+実行結果
+<pre>
+5
+</pre>
+
+すべてのデータを一つずつ足していき、最後にデータの個数で割っています。
+平均値を求めるデータが配列の場合は" @配列名 "とすることでデータの個数(要素数)を取得できます。
+
+<h3>表形式のデータから、特定の列の平均値を求めてみよう。</h3>
+
+以下のデータを考えてみましょう。
+<table> 
+  <thead>
+    <tr><th>name</th><th>age</th></tr>
+  </thead>
+  <tbody>
+    <tr><th>bob</th><th>9</th></tr>
+    <tr><th>tom</th><th>13</th></tr>
+    <tr><th>alice</th><th>11</th></tr>
+  </tbody>
+</table>
+
+配列,ハッシュのリファレンスで表すと以下のようになります。
+<pre>
+$array_ref = [
+  {name => 'bob',  age => 9},
+  {name => 'tom',  age => 13},
+  {name => 'alice',age => 11}
+];
+</pre>
+
+<h4>age列の平均値を求めるサンプルプログラム</h4>
+参照するデータが複雑になったためデータアクセスも少し難しくなりましたが、
+チェックする方法は先ほどと同じです。
+
+<pre>
+use strict;
+use warnings;
+
+my $array_ref = [
+  {name => 'bob', age => 9},
+  {name => 'tom', age => 13},
+  {name => 'alice',age => 11}
+];
+
+my $array_cnt = 0;
+my $sum = 0;
+my $avg = 0;
+
+for my $info (@{$array_ref}) {
+    $sum += $info->{'age'};
+    $array_cnt += 1;
+}
+$avg = $sum / $array_cnt;
+
+print "$avg\n";
+</pre>
+
+実行結果
+<pre>
+11
+</pre>
+
+リファレンスを扱った以外は先ほどと同じ処理になります。
+データの個数はデータを足した分だけカウントすることで求めています。
+今回は配列リファレンスのため、データの個数については以下のようにデリファレンスし求めることもできます。
+<pre>
+my $array_cnt = @{$array_cnt};
+</pre>
+
+このプログラムは、コピー＆ペーストして、<a href="https://perlbanjo.com">PerlBanjo</a>で、すぐに試すことができます。
